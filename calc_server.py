@@ -8,19 +8,34 @@ BUFFER_SIZE = 1024
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 sock.bind((SERVER_IP,SERVER_PORT))
 
-primoNumero=float(input("Inserisci primo numero: "))
-operazione=input("Inserisci l'operazione (+,-,/,*,%): ")
-secondoNumero=float(input("Inserisci il secondo numero: "))
 
-messaggio={
-    'primoNumero':primoNumero,
-    'operazione':operazione,
-    'secondoNumero':secondoNumero
-}
-messaggio=json.dumps(messaggio)
+while True:
+    data, addr = sock.recvfrom(BUFFER_SIZE)
 
-sock.sendall(messaggio.encode("UTF-8"))
-data = sock.recv(BUFFER_SIZE)
-print("Risultato: ", data.decode())
+    if not data:
+        break
+    
+    data=data.decode()
+    data=json.loads(data)
+    primoNumero=data['primoNumero']
+    operazione=data['operazione']
+    secondoNumero=data['secondoNumero']
 
-sock.close()
+    risultato=0
+    if operazione == '+':
+        risultato=primoNumero+secondoNumero
+    elif operazione == '-':
+        risultato=primoNumero-secondoNumero
+    elif operazione == '*':
+        risultato=primoNumero*secondoNumero
+    elif operazione == '/':
+        if secondoNumero != 0:
+            risultato=primoNumero/secondoNumero
+        else:
+            risultato = "Impossibile"
+    elif operazione == '%':
+        risultato=primoNumero%secondoNumero
+
+    sock.sendto(str(risultato).encode(), addr)
+
+

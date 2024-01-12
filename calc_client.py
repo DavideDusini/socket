@@ -6,34 +6,20 @@ SERVER_PORT = 5005
 BUFFER_SIZE = 1024
 
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-sock.bind((SERVER_IP,SERVER_PORT))
-
-
 while True:
-    data=sock.recv(BUFFER_SIZE)
+    primoNumero=float(input("Inserisci primo numero: "))
+    operazione=input("Inserisci l'operazione (+,-,/,*,%): ")
+    secondoNumero=float(input("Inserisci il secondo numero: "))
 
-    if not data:
-        break
+    messaggio={
+        'primoNumero':primoNumero,
+        'operazione':operazione,
+        'secondoNumero':secondoNumero
+    }
+    messaggio=json.dumps(messaggio)
 
-    data=data.decode()
-    data=json.loads(data)
-    primoNumero=data['primoNumero']
-    operazione=data['operazione']
-    secondoNumero=data['secondoNumero']
+    sock.sendto(messaggio.encode("UTF-8"), (SERVER_IP, SERVER_PORT))
+    data = sock.recv(BUFFER_SIZE)
+    print("Risultato: ", data.decode())
 
-    risultato=0
-    if operazione == '+':
-        risultato=primoNumero+secondoNumero
-    elif operazione == '-':
-        risultato=primoNumero-secondoNumero
-    elif operazione == '*':
-        risultato=primoNumero*secondoNumero
-    elif operazione == '/':
-        risultato=primoNumero/secondoNumero
-    elif operazione == '%':
-        risultato=primoNumero%secondoNumero
-
-    sock.sendto(risultato, (SERVER_IP,SERVER_PORT))
-
-
-sock.close()
+    sock.close()
