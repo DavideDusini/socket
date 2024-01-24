@@ -1,6 +1,6 @@
 import socket
 IP = '127.0.0.1'
-PORTA = 65432
+PORTA = 22006
 DIM_BUFFER = 1024
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock_server:
     sock_server.bind((IP, PORTA))
