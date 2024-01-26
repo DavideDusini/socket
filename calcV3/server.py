@@ -5,6 +5,7 @@ SERVER_ADDRESS = '127.0.0.1'
 SERVER_PORT = 22224
 
 def ricevi_comandi(sock_service, addr_client):
+    
     sock_service.close()
 
 def ricevi_connessioni(sock_listen):
