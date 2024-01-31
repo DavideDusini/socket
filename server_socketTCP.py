@@ -2,7 +2,7 @@
 import socket
 # Configurazione del server
 IP = "127.0.0.1"
-PORTA = 65432
+PORTA = 22006
 DIM_BUFFER = 1024
 # Creazione della socket del server con il costrutto with
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock_server:
